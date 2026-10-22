@@ -26,7 +26,7 @@ services:
     ports:
       - "3308:3306"
     volumes:
-      - catalog_data:/bar/lib/mysql
+      - catalog_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uapp", "-papp"]
       interval: 5s
