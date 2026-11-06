@@ -2,6 +2,7 @@ package dio.marketplace.ticketing.infrastructure;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.jpa.EntityManagerFactoryBuilder;
@@ -9,6 +10,11 @@ import org.springframework.boot.jpa.autoconfigure.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -49,8 +55,19 @@ import java.util.LinkedHashMap;
 @EnableJpaRepositories(basePackages = "dio.marketplace.ticketing",
         entityManagerFactoryRef = "ticketingEntityManagerFactory",
         transactionManagerRef = "ticketingTransactionManager")
+/**
+ * Class TicketingConfiguration do módulo ticketing.
+ * Representa o contrato, modelo ou componente indicado pelo próprio nome da declaração.
+ * Mantém as regras e responsabilidades descritas pela implementação, sem expor detalhes de infraestrutura desnecessários aos consumidores.
+ */
+@EnableRedisRepositories(basePackages = "dio.marketplace.ticketing", redisTemplateRef = "ticketingRedisTemplate")
 public class TicketingConfiguration {
     //Configuração do DataSource o Spring vai injetar quando tiver a utilização do qualifier ticketing
+/**
+ * Executa a operação ticketingDataSourceProperties, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @return resultado produzido pela operação.
+ */
     @Qualifier("ticketing")
     @Bean(defaultCandidate = false)
     @ConfigurationProperties("ticketing.datasource")
@@ -58,6 +75,12 @@ public class TicketingConfiguration {
         return new DataSourceProperties();
     }
 
+/**
+ * Executa a operação ticketingDataSource, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param properties parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Qualifier("ticketing")
     @Bean(defaultCandidate = false)
     @ConfigurationProperties("ticketing.datasource.configuration")
@@ -65,6 +88,11 @@ public class TicketingConfiguration {
         return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
+/**
+ * Executa a operação ticketingJpaProperties, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @return resultado produzido pela operação.
+ */
     @Qualifier("ticketing")
     @Bean(defaultCandidate = false)
     @ConfigurationProperties("ticketing.jpa")
@@ -72,6 +100,12 @@ public class TicketingConfiguration {
         return new JpaProperties();
     }
 
+/**
+ * Executa a operação ticketingEntityManagerFactory, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param ("ticketing" parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Qualifier("ticketing")
     @Bean(defaultCandidate = false)
     public LocalContainerEntityManagerFactoryBean ticketingEntityManagerFactory(@Qualifier("ticketing") DataSource dataSource,
@@ -89,9 +123,42 @@ public class TicketingConfiguration {
                 .build();
     }
 
+/**
+ * Executa a operação ticketingTransactionManager, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param emf parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Qualifier("ticketing")
     @Bean
     public PlatformTransactionManager ticketingTransactionManager(@Qualifier("ticketing") LocalContainerEntityManagerFactoryBean emf){
         return new JpaTransactionManager(emf.getObject());
+    }
+
+/**
+ * Executa a operação ticketingRedisConnectionFactory, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param ("${ticketing.redis.host}" parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
+    @Qualifier("ticketing")
+    @Bean(defaultCandidate = false)
+    public RedisConnectionFactory ticketingRedisConnectionFactory(@Value("${ticketing.redis.host}") String hostName,
+                                                @Value("${ticketing.redis.port}") int port) {
+        return new JedisConnectionFactory(new RedisStandaloneConfiguration(hostName, port));
+    }
+
+/**
+ * Executa a operação ticketingRedisTemplate, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param connectionFactory parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
+    @Qualifier("ticketing")
+    @Bean(defaultCandidate = false)
+    public RedisTemplate<?, ?> ticketingRedisTemplate(@Qualifier("ticketing") RedisConnectionFactory connectionFactory){
+        RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        return template;
     }
 }

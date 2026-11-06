@@ -18,6 +18,12 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * como identificador único para cada evento.
  */
 import java.util.UUID;
+/**
+ * Interface EventCrudRepository do módulo persistence.
+ * Representa o contrato, modelo ou componente indicado pelo próprio nome da declaração.
+ * Mantém as regras e responsabilidades descritas pela implementação, sem expor detalhes de infraestrutura desnecessários aos consumidores.
+ */
 @RepositoryRestResource(exported = false, path = "_event")
 public interface EventCrudRepository extends CrudRepository<Event, UUID> {
+    boolean existsByCorrelationIdAndSectors_Seats_CorrelationId(UUID eventId, String seatId);
 }
