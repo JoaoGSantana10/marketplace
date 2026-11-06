@@ -1,7 +1,16 @@
 package dio.marketplace.ticketing.domain;
 
+/**
+ * Class SeatAlreadyReservedException do módulo ticketing.
+ * Representa o contrato, modelo ou componente indicado pelo próprio nome da declaração.
+ * Mantém as regras e responsabilidades descritas pela implementação, sem expor detalhes de infraestrutura desnecessários aos consumidores.
+ */
 public class SeatAlreadyReservedException extends RuntimeException {
-  public SeatAlreadyReservedException(String message) {
-    super(message);
-  }
+/**
+ * Executa a operação SeatAlreadyReservedException, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ */
+    public SeatAlreadyReservedException() {
+        super("Seat is already reserved");
+    }
 }

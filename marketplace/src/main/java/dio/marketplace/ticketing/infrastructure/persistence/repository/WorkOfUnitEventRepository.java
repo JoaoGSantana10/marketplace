@@ -34,14 +34,31 @@ import java.util.List;
  */
 @Repository
 public class WorkOfUnitEventRepository implements EventRepository {
+/**
+ * Armazena o atributo eventCrudRepository e o estado necessário ao componente.
+ */
     private final EventCrudRepository eventCrudRepository;
+/**
+ * Armazena o atributo redisSeatLockRepository e o estado necessário ao componente.
+ */
     private final RedisSeatLockRepository redisSeatLockRepository;
 
+/**
+ * Executa a operação WorkOfUnitEventRepository, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param eventCrudRepository parâmetro utilizado pela operação.
+ * @param redisSeatLockRepository parâmetro utilizado pela operação.
+ */
     public WorkOfUnitEventRepository(EventCrudRepository eventCrudRepository, RedisSeatLockRepository redisSeatLockRepository) {
         this.eventCrudRepository = eventCrudRepository;
         this.redisSeatLockRepository = redisSeatLockRepository;
     }
 
+/**
+ * Executa a operação save, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param event parâmetro utilizado pela operação.
+ */
     @Override
     public void save(Event event){
         var sectors = event.getSeats().entrySet().stream()
@@ -74,11 +91,26 @@ public class WorkOfUnitEventRepository implements EventRepository {
         eventCrudRepository.save(eventEntity);
     }
 
+/**
+ * Executa a operação existsSeat, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param eventId parâmetro utilizado pela operação.
+ * @param seatId parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Override
     public boolean existsSeat(EventId eventId, SeatId seatId) {
         return eventCrudRepository.existsByCorrelationIdAndSectors_Seats_CorrelationId(eventId.id(), seatId.id());
     }
 
+/**
+ * Executa a operação tryLockSeat, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param eventId parâmetro utilizado pela operação.
+ * @param seatId parâmetro utilizado pela operação.
+ * @param customerId parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Override
     public boolean tryLockSeat(EventId eventId, SeatId seatId, CustomerId customerId) {
         String lockId = eventId.id() + ":" + seatId.id();
