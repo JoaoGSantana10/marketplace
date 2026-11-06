@@ -21,10 +21,26 @@ import java.util.UUID;
 
 @Getter
 public class Event {
+/**
+ * Armazena o atributo id e o estado necessário ao componente.
+ */
     private UUID id;
+/**
+ * Armazena o atributo correlationId e o estado necessário ao componente.
+ */
     private EventId correlationId;
+/**
+ * Armazena o atributo seats e o estado necessário ao componente.
+ */
     private Map<Sector, List<Seat>> seats;
 
+/**
+ * Executa a operação Event, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param correlationId parâmetro utilizado pela operação.
+ * @param Map<Sector parâmetro utilizado pela operação.
+ * @param seats parâmetro utilizado pela operação.
+ */
     public Event(String correlationId, Map<Sector, List<Seat>> seats) {
         this.id = UUID.randomUUID();
         this.correlationId = new EventId(correlationId);

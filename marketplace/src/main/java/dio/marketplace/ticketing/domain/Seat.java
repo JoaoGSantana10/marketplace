@@ -10,9 +10,20 @@ import java.util.UUID;
  */
 @Getter
 public class Seat {
+/**
+ * Armazena o atributo id e o estado necessário ao componente.
+ */
     private UUID id;
+/**
+ * Armazena o atributo correlationId e o estado necessário ao componente.
+ */
     private SeatId correlationId;
 
+/**
+ * Executa a operação Seat, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param correlationId parâmetro utilizado pela operação.
+ */
     public Seat(String correlationId) {
         this.id = UUID.randomUUID();
         this.correlationId = new SeatId(correlationId);

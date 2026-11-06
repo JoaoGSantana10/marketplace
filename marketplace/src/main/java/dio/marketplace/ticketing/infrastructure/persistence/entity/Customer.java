@@ -27,11 +27,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
+/**
+ * Armazena o atributo id e o estado necessário ao componente.
+ */
     @Id
     private UUID id;
 
+/**
+ * Armazena o atributo correlationId e o estado necessário ao componente.
+ */
     private UUID correlationId;
 
+/**
+ * Armazena o atributo name e o estado necessário ao componente.
+ */
     @NotBlank
     @Column(nullable = false)
     private String name;

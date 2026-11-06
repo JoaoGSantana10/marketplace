@@ -26,12 +26,25 @@ import java.util.stream.Collectors;
 
 @Service
 public class CreateEventUseCase {
+/**
+ * Armazena o atributo eventRepository e o estado necessário ao componente.
+ */
     private final EventRepository eventRepository;
 
+/**
+ * Executa a operação CreateEventUseCase, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param eventRepository parâmetro utilizado pela operação.
+ */
     public CreateEventUseCase(EventRepository eventRepository){
         this.eventRepository = eventRepository;
     }
 
+/**
+ * Executa a operação execute, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param event parâmetro utilizado pela operação.
+ */
     public void execute(EventUpdated event){
         Map<Sector, List<Seat>> seats = event.sectors().stream()
                 .collect(Collectors.toMap(

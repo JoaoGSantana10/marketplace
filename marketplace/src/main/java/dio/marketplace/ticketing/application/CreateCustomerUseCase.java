@@ -22,12 +22,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CreateCustomerUseCase {
+/**
+ * Armazena o atributo customerRepository e o estado necessário ao componente.
+ */
     private final CustomerRepository customerRepository;
 
+/**
+ * Executa a operação CreateCustomerUseCase, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param customerRepository parâmetro utilizado pela operação.
+ */
     public CreateCustomerUseCase(CustomerRepository customerRepository){
         this.customerRepository = customerRepository;
     }
 
+/**
+ * Executa a operação execute, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param event parâmetro utilizado pela operação.
+ */
     public void execute(CustomerCreated event){
         var customer = new Customer(event.id(), event.name());
         customerRepository.save(customer);

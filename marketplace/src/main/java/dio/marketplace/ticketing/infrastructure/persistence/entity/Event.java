@@ -27,9 +27,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event {
+/**
+ * Armazena o atributo id e o estado necessário ao componente.
+ */
     @Id
     private UUID id;
 
+/**
+ * Armazena o atributo correlationId e o estado necessário ao componente.
+ */
     private UUID correlationId;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

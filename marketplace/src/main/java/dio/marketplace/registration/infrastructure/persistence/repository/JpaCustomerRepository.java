@@ -11,17 +11,40 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
+/**
+ * Class JpaCustomerRepository do módulo persistence.
+ * Representa o contrato, modelo ou componente indicado pelo próprio nome da declaração.
+ * Mantém as regras e responsabilidades descritas pela implementação, sem expor detalhes de infraestrutura desnecessários aos consumidores.
+ */
 @Repository
 public class JpaCustomerRepository implements CustomerRepository {
+/**
+ * Armazena o atributo customerEntityRepository e o estado necessário ao componente.
+ */
     private final CustomerEntityRepository customerEntityRepository;
+/**
+ * Armazena o atributo publisher e o estado necessário ao componente.
+ */
     private final ApplicationEventPublisher publisher;
 
+/**
+ * Executa a operação JpaCustomerRepository, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param customerEntityRepository parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     public JpaCustomerRepository(CustomerEntityRepository customerEntityRepository,
                                  ApplicationEventPublisher publisher) {
         this.customerEntityRepository = customerEntityRepository;
         this.publisher = publisher;
     }
 
+/**
+ * Executa a operação save, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param customer parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Override
     public Customer save(Customer customer) {
             var entity = mapper(customer);
@@ -32,6 +55,11 @@ public class JpaCustomerRepository implements CustomerRepository {
             return customer;
     }
 
+/**
+ * Executa a operação findAll, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @return resultado produzido pela operação.
+ */
     @Override
     public List<Customer> findAll(){
         var iterable = customerEntityRepository.findAll();
@@ -41,6 +69,12 @@ public class JpaCustomerRepository implements CustomerRepository {
                 .toList();
     }
 
+/**
+ * Executa a operação mapper, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param customer parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     private static dio.marketplace.registration.infrastructure.persistence.entity.Customer mapper (Customer customer){
         var entity = new dio.marketplace.registration.infrastructure.persistence.entity.Customer();
 
@@ -51,6 +85,12 @@ public class JpaCustomerRepository implements CustomerRepository {
         return entity;
     }
 
+/**
+ * Executa a operação mapper, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param entity parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     private static Customer mapper(dio.marketplace.registration.infrastructure.persistence.entity.Customer entity){
         String fullName = Optional.ofNullable(entity.getLastName())
                 .map(lastName -> entity.getFirstName() + " " + lastName)

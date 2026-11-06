@@ -16,10 +16,25 @@ import java.util.UUID;
 
 @Getter
 public class Customer {
+/**
+ * Armazena o atributo id e o estado necessário ao componente.
+ */
     private UUID id;
+/**
+ * Armazena o atributo correlationId e o estado necessário ao componente.
+ */
     private CustomerId correlationId;
+/**
+ * Armazena o atributo name e o estado necessário ao componente.
+ */
     private String name;
 
+/**
+ * Executa a operação Customer, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param correlationId parâmetro utilizado pela operação.
+ * @param name parâmetro utilizado pela operação.
+ */
     public Customer(String correlationId, String name){
         this.id = UUID.randomUUID();
         this.correlationId = new CustomerId(correlationId);

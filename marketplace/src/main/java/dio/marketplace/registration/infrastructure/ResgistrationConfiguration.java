@@ -23,8 +23,18 @@ ele vai sobrescrever para não utilizar as que ele já traz de padrão */
         basePackages = "dio.marketplace.registration",
         entityManagerFactoryRef = "registrationEntityManagerFactory",
         transactionManagerRef = "registrationTransactionManager")
+/**
+ * Class ResgistrationConfiguration do módulo registration.
+ * Representa o contrato, modelo ou componente indicado pelo próprio nome da declaração.
+ * Mantém as regras e responsabilidades descritas pela implementação, sem expor detalhes de infraestrutura desnecessários aos consumidores.
+ */
 public class ResgistrationConfiguration {
 
+/**
+ * Executa a operação registrationDataSourceProperties, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @return resultado produzido pela operação.
+ */
     @Primary
     @Bean
     @ConfigurationProperties("registration.datasource")
@@ -32,6 +42,12 @@ public class ResgistrationConfiguration {
         return new DataSourceProperties();
     }
 
+/**
+ * Executa a operação registrationDataSource, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param properties parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Primary
     @Bean
     @ConfigurationProperties("registration.datasource.configuration")
@@ -39,6 +55,11 @@ public class ResgistrationConfiguration {
         return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
+/**
+ * Executa a operação registrationJpaProperties, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @return resultado produzido pela operação.
+ */
     @Primary
     @Bean
     @ConfigurationProperties("registration.jpa")
@@ -47,6 +68,12 @@ public class ResgistrationConfiguration {
     }
 
 
+/**
+ * Executa a operação registrationEntityManagerFactory, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param dataSource parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Primary
     @Bean
     public LocalContainerEntityManagerFactoryBean registrationEntityManagerFactory(DataSource dataSource,
@@ -66,6 +93,12 @@ public class ResgistrationConfiguration {
                 .build();
     }
 
+/**
+ * Executa a operação registrationTransactionManager, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param emf parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     @Primary
     @Bean
     public PlatformTransactionManager registrationTransactionManager(LocalContainerEntityManagerFactoryBean emf) {

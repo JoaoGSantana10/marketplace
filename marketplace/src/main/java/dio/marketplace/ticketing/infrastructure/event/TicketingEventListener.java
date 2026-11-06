@@ -30,14 +30,31 @@ import org.springframework.stereotype.Component;
 public class TicketingEventListener {
     private static final Logger logger = LoggerFactory.getLogger(TicketingEventListener.class);
 
+/**
+ * Armazena o atributo createCustomerUseCase e o estado necessário ao componente.
+ */
     private final CreateCustomerUseCase createCustomerUseCase;
+/**
+ * Armazena o atributo createEventUseCase e o estado necessário ao componente.
+ */
     private final CreateEventUseCase createEventUseCase;
 
+/**
+ * Executa a operação TicketingEventListener, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param createCustomerUseCase parâmetro utilizado pela operação.
+ * @param createEventUseCase parâmetro utilizado pela operação.
+ */
     public TicketingEventListener(CreateCustomerUseCase createCustomerUseCase, CreateEventUseCase createEventUseCase){
         this.createCustomerUseCase = createCustomerUseCase;
         this.createEventUseCase = createEventUseCase;
     }
 
+/**
+ * Executa a operação handle, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param event parâmetro utilizado pela operação.
+ */
     @EventListener
     @Async
     public void handle(CustomerCreated event) {
@@ -45,6 +62,11 @@ public class TicketingEventListener {
         createCustomerUseCase.execute(event);
     }
 
+/**
+ * Executa a operação handle, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param event parâmetro utilizado pela operação.
+ */
     @EventListener
     @Async
     public void handle(EventUpdated event) {

@@ -22,12 +22,25 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class PostgresCustomerRepository implements CustomerRepository {
+/**
+ * Armazena o atributo customerCrudRepository e o estado necessário ao componente.
+ */
     private final CustomerCrudRepository customerCrudRepository;
 
+/**
+ * Executa a operação PostgresCustomerRepository, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param customerCrudRepository parâmetro utilizado pela operação.
+ */
     public PostgresCustomerRepository(CustomerCrudRepository customerCrudRepository){
         this.customerCrudRepository = customerCrudRepository;
     }
 
+/**
+ * Executa a operação save, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param customer parâmetro utilizado pela operação.
+ */
     @Override
     public void save(Customer customer) {
         var entity = new dio.marketplace.ticketing.infrastructure.persistence.entity.Customer(

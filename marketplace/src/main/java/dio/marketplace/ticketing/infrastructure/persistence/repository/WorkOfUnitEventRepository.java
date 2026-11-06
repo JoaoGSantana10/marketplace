@@ -1,11 +1,10 @@
 package dio.marketplace.ticketing.infrastructure.persistence.repository;
 
-import dio.marketplace.ticketing.domain.Event;
-import dio.marketplace.ticketing.domain.EventRepository;
-import dio.marketplace.ticketing.domain.Seat;
-import dio.marketplace.ticketing.domain.Sector;
+import dio.marketplace.ticketing.domain.*;
+import dio.marketplace.ticketing.infrastructure.persistence.entity.SeatLock;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -34,11 +33,13 @@ import java.util.List;
  * correspondentes na camada de persistência, garantindo que os dados sejam corretamente armazenados no banco.
  */
 @Repository
-public class PostgresEventRepository implements EventRepository {
+public class WorkOfUnitEventRepository implements EventRepository {
     private final EventCrudRepository eventCrudRepository;
+    private final RedisSeatLockRepository redisSeatLockRepository;
 
-    public PostgresEventRepository(EventCrudRepository eventCrudRepository) {
+    public WorkOfUnitEventRepository(EventCrudRepository eventCrudRepository, RedisSeatLockRepository redisSeatLockRepository) {
         this.eventCrudRepository = eventCrudRepository;
+        this.redisSeatLockRepository = redisSeatLockRepository;
     }
 
     @Override
@@ -71,5 +72,23 @@ public class PostgresEventRepository implements EventRepository {
         );
 
         eventCrudRepository.save(eventEntity);
+    }
+
+    @Override
+    public boolean existsSeat(EventId eventId, SeatId seatId) {
+        return eventCrudRepository.existsByCorrelationIdAndSectors_Seats_CorrelationId(eventId.id(), seatId.id());
+    }
+
+    @Override
+    public boolean tryLockSeat(EventId eventId, SeatId seatId, CustomerId customerId) {
+        String lockId = eventId.id() + ":" + seatId.id();
+
+        if (redisSeatLockRepository.existsById(lockId)) {
+            return false;
+        }
+
+        var lock = new SeatLock(lockId, customerId.id().toString(), Instant.now());
+        redisSeatLockRepository.save(lock);
+        return true;
     }
 }

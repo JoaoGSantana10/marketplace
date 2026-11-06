@@ -34,11 +34,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sector {
+/**
+ * Armazena o atributo id e o estado necessário ao componente.
+ */
     @Id
     private UUID id;
 
+/**
+ * Armazena o atributo correlationId e o estado necessário ao componente.
+ */
     private String correlationId;
 
+/**
+ * Armazena o atributo price e o estado necessário ao componente.
+ */
     private BigDecimal price;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

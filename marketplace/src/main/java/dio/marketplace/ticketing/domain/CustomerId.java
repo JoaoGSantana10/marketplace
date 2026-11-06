@@ -14,6 +14,12 @@ public record CustomerId(UUID id) {
         Assert.notNull(id, "id must not be null");
     }
 
+/**
+ * Executa a operação CustomerId, conforme o papel desta classe no fluxo da aplicação.
+ * A operação preserva as invariantes do domínio e delega persistência ou integração aos componentes apropriados.
+ * @param id parâmetro utilizado pela operação.
+ * @return resultado produzido pela operação.
+ */
     public CustomerId(String id){
         this(UUID.fromString(id));
     }
